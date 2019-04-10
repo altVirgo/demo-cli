@@ -5,6 +5,7 @@ const program = require('commander')
 const shell = require('shelljs');
 const log = require('tracer').colorConsole()
 
+let url;
 
 program
     .version('0.0.1', '-v, --version')
@@ -19,24 +20,29 @@ program
         log.info('- p ')
         if (project) {
             let pwd = shell.pwd()
-            let url;
-
             if (cmd.webpack && cmd.jsx && cmd.vue) {
                 url = `https://github.com/altVirgo/webpack-vue-jsx.git`;
+                cloneProject(project);
             } else if (cmd.vue) {
                 url = `https://github.com/altVirgo/vue-simple-demo.git`;
+                cloneProject(project);
             } else if (cmd.react) {
                 url = `https://github.com/altVirgo/react-simple-demo.git`;
+                cloneProject(project);
             } else {
                 url = `https://github.com/altVirgo/vue-simple-demo.git`;
             }
-            log.info(`正在${url}拉取模板代码 ...`)
-            clone(url, pwd + `/${project}`, null, function() {
-                shell.rm('-rf', pwd + `/${project}/.git`)
-                log.info('模板工程建立完成')
-            })
+
         } else {
             log.error('正确命令例子：alt-cli init <myproject> ')
         }
     })
 program.parse(process.argv)
+
+function cloneProject(project) {
+    log.info(`正在${url}拉取模板代码 ...`)
+    clone(url, pwd + `/${project}`, null, function() {
+        shell.rm('-rf', pwd + `/${project}/.git`)
+        log.info('模板工程建立完成')
+    })
+}
